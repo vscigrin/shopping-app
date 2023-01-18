@@ -1,0 +1,26 @@
+<div class="top-menu">
+  {{ title }}
+</div>
+<div class="top-submenu">
+  <div>
+    <button style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;"
+      (click)="goBack()"></button>
+  </div>
+  <div>
+    <button style="background: url('assets/images/save.png') no-repeat; background-position: 50% 50%;"
+      (click)="saveShop()"></button>
+  </div>
+</div>
+<div class="content">
+  <div style="padding-top: 50px;"></div>
+  <form>
+    <div class="row">
+      <div class="left">
+        <label for="shopName">Shop Name :</label>
+      </div>
+      <div class="right">
+        <input id="shopName" name="shopName" type="text" [(ngModel)]="shop.name" />
+      </div>
+    </div>
+  </form>
+</div>

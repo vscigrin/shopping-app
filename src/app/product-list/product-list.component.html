@@ -1,0 +1,27 @@
+<div class="top-menu">
+  {{ title }}
+</div>
+<div class="top-submenu">
+  <div>
+    <button (click)="goBack()"
+      style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+  <div>
+    <button (click)="clearProducts()"
+      style="background: url('assets/images/product_remove.png') no-repeat; background-position: 50% 50%;"></button>
+    <button (click)="addProduct()"
+      style="background: url('assets/images/product_add.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+</div>
+<div class="content">
+  <div class="list" *ngFor="let item of productList;">
+    <div class="row" style="border-bottom: 1px solid lightgray;">
+      <button *ngIf="item.bought === true" (click)="checkProduct(item)"
+        style="background: url('assets/images/check.png') no-repeat; background-position: 50% 50%;"></button>
+      <button *ngIf="item.bought === false" (click)="checkProduct(item)"></button>
+      <p (click)="editProduct(item)">{{ item.amount }} x {{ item.name }}</p>
+      <button (click)="deleteProduct(item)"
+        style="background: url('assets/images/delete.png') no-repeat; background-position: 50% 50%;"></button>
+    </div>
+  </div>
+</div>

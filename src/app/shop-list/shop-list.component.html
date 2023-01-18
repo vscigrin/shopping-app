@@ -1,0 +1,21 @@
+<div class="top-menu">
+  Shop List
+</div>
+<div class="top-submenu">
+  <div></div>
+  <div>
+    <button (click)="addShop()"
+      style="background: url('assets/images/add.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+</div>
+<div class="content">
+  <div class="list" *ngFor="let item of shopList;">
+    <div class="row" style="border-bottom: 1px solid lightgray;">
+      <p (click)="viewShop(item)">{{ item.name }}</p>
+      <button style="background: url('assets/images/edit.png') no-repeat; background-position: 50% 50%;"
+        (click)="editShop(item)"></button><button
+        style="background: url('assets/images/delete.png') no-repeat; background-position: 50% 50%;"
+        (click)="deleteShop(item)"></button>
+    </div>
+  </div>
+</div>

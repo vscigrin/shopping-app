@@ -1,0 +1,38 @@
+<div class="top-menu">
+  {{ title }}
+</div>
+<div class="top-submenu">
+  <div>
+    <button (click)="goBack()"
+      style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+  <div>
+    <button (click)="saveProduct()"
+      style="background: url('assets/images/save.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+</div>
+<div class="content">
+  <div style="padding-top: 50px;"></div>
+  <form>
+    <div class="row">
+      <div class="left">
+        <label for="productName">Product Name :</label>
+      </div>
+      <div class="right">
+        <input id="productName" name="productName" type="text" [(ngModel)]="product.name" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label>Product Amount :</label>
+      </div>
+      <div class="right">
+        <button (click)="minusAmount()"
+          style="background: url('assets/images/minus.png') no-repeat; background-position: 50% 50%;"></button>
+        <span>{{ product.amount }}</span>
+        <button (click)="plusAmount()"
+          style="background: url('assets/images/plus.png') no-repeat; background-position: 50% 50%;"></button>
+      </div>
+    </div>
+  </form>
+</div>
