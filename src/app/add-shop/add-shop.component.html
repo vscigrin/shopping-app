@@ -1,14 +1,14 @@
 <div class="top-menu">
-  {{ title }}
+  <div></div>
+  <div>{{ title }}</div>
+  <div></div>
 </div>
 <div class="top-submenu">
   <div>
-    <button style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;"
-      (click)="goBack()"></button>
+    <button style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;" (click)="goBack()"></button>
   </div>
   <div>
-    <button style="background: url('assets/images/save.png') no-repeat; background-position: 50% 50%;"
-      (click)="saveShop()"></button>
+    <button style="background: url('assets/images/save.png') no-repeat; background-position: 50% 50%;" (click)="saveShop()"></button>
   </div>
 </div>
 <div class="content">
@@ -16,7 +16,7 @@
   <form>
     <div class="row">
       <div class="left">
-        <label for="shopName">Shop Name :</label>
+        <label for="shopName">Name:</label>
       </div>
       <div class="right">
         <input id="shopName" name="shopName" type="text" [(ngModel)]="shop.name" />

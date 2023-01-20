@@ -1,0 +1,32 @@
+<div class="top-menu">
+  <div></div>
+  <div>{{ title }}</div>
+  <div></div>
+</div>
+<div class="top-submenu">
+  <div></div>
+  <div>
+    <button (click)="register()" style="background: url('assets/images/add.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+</div>
+<div class="content">
+  <div style="padding-top: 50px;"></div>
+  <form>
+    <div class="row">
+      <div class="left">
+        <label for="email">Name:</label>
+      </div>
+      <div class="right">
+        <input id="name" name="name" type="text" [(ngModel)]="user.name" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="email">Email:</label>
+      </div>
+      <div class="right">
+        <input id="email" name="email" type="text" [(ngModel)]="user.email" />
+      </div>
+    </div>
+  </form>
+</div>

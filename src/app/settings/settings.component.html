@@ -1,0 +1,44 @@
+<div class="top-menu">
+  <div></div>
+  <div>{{ title }}</div>
+  <div></div>
+</div>
+<div class="top-submenu">
+  <div>
+    <button (click)="goBack()" style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+  <div>
+    <button (click)="sync()" style="background: url('assets/images/sync.png') no-repeat; background-position: 50% 50%;"></button>
+  </div>
+</div>
+<div class="content">
+  <div style="padding-top: 50px;"></div>
+  <form>
+    <div class="row">
+      <div class="left">
+        <label for="email">Original Name:</label>
+      </div>
+      <div class="right">
+        {{ originalUser.name }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="email">Original Email:</label>
+      </div>
+      <div class="right">
+        {{ originalUser.email }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="left">
+        <label for="email">Current Users:</label>
+      </div>
+      <div class="right">
+        <select name="selectUsers" [(ngModel)]="selectedUser" (ngModelChange)="selectUsersChange($event)">
+          <option *ngFor="let u of users" [ngValue]="u.email">{{u.name}}</option>
+        </select>
+      </div>
+    </div>
+  </form>
+</div>
