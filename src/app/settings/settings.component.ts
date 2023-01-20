@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { DataService } from '../data.service';
+import { SyncService } from '../sync.service';
 
 @Component({
     selector: 'app-settings',
@@ -18,7 +19,7 @@ export class SettingsComponent implements OnInit {
     originalUser: string = "";
     selectedUser: string = "";
 
-    constructor(private route: ActivatedRoute, private router: Router, private dataService: DataService) {
+    constructor(private route: ActivatedRoute, private router: Router, private dataService: DataService, private syncService: SyncService) {
         this.users = [];
         this.selectedUser = "";
     }
@@ -47,6 +48,10 @@ export class SettingsComponent implements OnInit {
                 this.dataService.setSelectedUser(tmpOriginalUser);
             }
         }
+
+        this.syncService.getUsers().subscribe(data => {
+            console.log(data);
+        })
     }
 
     goBack() {
@@ -59,6 +64,9 @@ export class SettingsComponent implements OnInit {
         console.log(this.tag + "sync :: Called");
 
         if (confirm("Do you want to syncronize you data with server?") == true) {
+
+            //syncService
+            /*
             let newUsers = [
                 { "email": "vitalij.scigrin@gmail.com", "name": "Vitalij" },
                 { "email": "arina.avdejeva@gmail.com", "name": "Arina" },
@@ -80,6 +88,7 @@ export class SettingsComponent implements OnInit {
                     this.selectedUser = this.originalUser;
                 }
             }
+            */
         }
     }
 
