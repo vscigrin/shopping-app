@@ -48,10 +48,6 @@ export class SettingsComponent implements OnInit {
                 this.dataService.setSelectedUser(tmpOriginalUser);
             }
         }
-
-        this.syncService.getUsers().subscribe(data => {
-            console.log(data);
-        })
     }
 
     goBack() {
@@ -65,6 +61,7 @@ export class SettingsComponent implements OnInit {
 
         if (confirm("Do you want to syncronize you data with server?") == true) {
 
+            this.syncService.sendData();
             //syncService
             /*
             let newUsers = [
