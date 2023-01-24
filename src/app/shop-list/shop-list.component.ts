@@ -26,35 +26,32 @@ export class ShopListComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             console.log(this.tag + "ngOnInit :: this.route.queryParams.subscribe :: params = " + JSON.stringify(params, null, 2));
 
-            this.shopList = this.dataService.getShops();
+            let family = this.dataService.getFamily();
+            if (family) {
+                this.shopList = this.dataService.getShops();
+            }
+            else {
+                this.router.navigate([''], {});
+            }
         });
     }
 
     addShop() {
         console.log(this.tag + "addShop :: Called");
 
-        this.router.navigate(['add-shop'], { queryParams: { "shop": JSON.stringify(null) } });
+        this.router.navigate(['add-shop'], { queryParams: { "shopId": JSON.stringify(null) } });
     }
 
     viewShop(extShop) {
-        console.log(this.tag + "viewShop :: Called with extShop = " + JSON.stringify(extShop, null, 2));
+        console.log(this.tag + "viewShop :: Called with extShop.id = " + JSON.stringify(extShop.id, null, 2));
 
-        this.router.navigate(['product-list'], { queryParams: { "shop": JSON.stringify(extShop) } });
+        this.router.navigate(['product-list'], { queryParams: { "shopId": JSON.stringify(extShop.id) } });
     }
 
     editShop(extShop) {
-        console.log(this.tag + "editShop :: Called with extShop = " + JSON.stringify(extShop, null, 2));
+        console.log(this.tag + "editShop :: Called with extShop.id = " + JSON.stringify(extShop.id, null, 2));
 
-        this.router.navigate(['add-shop'], { queryParams: { "shop": JSON.stringify(extShop) } });
-    }
-
-    deleteShop(extShop) {
-        console.log(this.tag + "deleteShop :: Called with extShop = " + JSON.stringify(extShop, null, 2));
-
-        if (confirm("Delete shop?") == true) {
-            this.dataService.deleteShop(extShop);
-            this.shopList = this.dataService.getShops();
-        }
+        this.router.navigate(['add-shop'], { queryParams: { "shopId": JSON.stringify(extShop.id) } });
     }
 
     showSettings() {

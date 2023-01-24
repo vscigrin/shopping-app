@@ -6,7 +6,7 @@
 <div class="top-submenu">
   <div></div>
   <div>
-    <button (click)="register()" style="background: url('assets/images/add.png') no-repeat; background-position: 50% 50%;"></button>
+    <!-- button (click)="register()" style="background: url('assets/images/add.png') no-repeat; background-position: 50% 50%;"></button -->
   </div>
 </div>
 <div class="content">
@@ -14,19 +14,14 @@
   <form>
     <div class="row">
       <div class="left">
-        <label for="email">Name:</label>
+        <label for="email">Family:</label>
       </div>
       <div class="right">
-        <input id="name" name="name" type="text" [(ngModel)]="user.name" />
+        <input id="family" name="family" type="text" [(ngModel)]="family" />
       </div>
     </div>
-    <div class="row">
-      <div class="left">
-        <label for="email">Email:</label>
-      </div>
-      <div class="right">
-        <input id="email" name="email" type="text" [(ngModel)]="user.email" />
-      </div>
+    <div class="row" style="justify-content: center;">
+      <button (click)="register()" style="width: 100px">Register</button>
     </div>
   </form>
 </div>

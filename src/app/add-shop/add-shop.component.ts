@@ -28,20 +28,21 @@ export class AddShopComponent implements OnInit {
 
             this.title = "Add Shop";
             this.isEdit = false;
-            this.shop.id = "" + Date.now();
-            this.shop.name = "";
 
-            let parsedShop = JSON.parse(params.shop);
-            console.log(this.tag + "ngOnInit :: parsedShop = ", parsedShop);
+            let parsedShopId = JSON.parse(params.shopId);
+            console.log(this.tag + "ngOnInit :: parsedShopId = ", parsedShopId);
 
-            if (parsedShop) {
-                console.log(this.tag + "ngOnInit :: params are not empty");
+            if (parsedShopId) {
+                console.log(this.tag + "ngOnInit :: params are not empty")
+
+                this.shop = this.dataService.getShop(parsedShopId);
 
                 this.title = "Edit Shop";
                 this.isEdit = true;
-                this.shop.id = parsedShop.id;
-                this.shop.name = parsedShop.name;
-
+            }
+            else {
+                this.shop.id = "" + Date.now();
+                this.shop.name = "";
             }
 
             console.log(this.tag + "ngOnInit :: this.shop = " + JSON.stringify(this.shop, null, 2));
@@ -73,6 +74,15 @@ export class AddShopComponent implements OnInit {
         }
         else {
             alert("Please enter the shop name!");
+        }
+    }
+
+    deleteShop() {
+        console.log(this.tag + "deleteShop :: Called");
+
+        if (confirm("Delete shop?") == true) {
+            this.dataService.deleteShop(this.shop.id);
+            this.goBack();
         }
     }
 

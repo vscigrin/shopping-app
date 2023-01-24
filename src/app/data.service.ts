@@ -7,90 +7,90 @@ export class DataService {
 
     tag: string = "[DataService] ";
 
-    originalUser: any = {};
-    selectedUser: any = {};
-    shops: any = [];
-    products: any = [];
+    family: string = "";
+    data: any = [];
 
     constructor() { }
 
+    loadData() {
+        console.log(this.tag + "loadData :: Called");
+
+        let tmpData = localStorage.getItem("data");
+        console.log(this.tag + "loadData :: tmpData = " + tmpData);
+
+        try {
+
+            let tmpDataJson = JSON.parse(tmpData);
+
+            if (tmpDataJson.length > 0) {
+                this.data = tmpDataJson;
+            }
+        }
+        catch (err) {
+            console.log(this.tag + "loadData :: error :: failed to parse JSON.");
+        }
+    }
+
+    saveData() {
+        console.log(this.tag + "saveData :: Called");
+
+        localStorage.setItem("data", JSON.stringify(this.data));
+    }
+
+    getAllData() {
+        console.log(this.tag + "getAllData :: Called");
+
+        return this.data;
+    }
+
+    saveAllData(extData) {
+        console.log(this.tag + "saveAllData :: Called");
+
+        localStorage.setItem("data", JSON.stringify(extData));
+    }
+
     // Shops
 
-    getOriginalUser() {
-        console.log(this.tag + "getOriginalUser :: Called");
+    getFamily() {
+        console.log(this.tag + "getFamily :: Called");
 
-        let tmpOriginalUser = localStorage.getItem("originalUser");
-        try {
+        this.family = localStorage.getItem("family");
 
-            let tmpOriginalUserJson = JSON.parse(tmpOriginalUser);
-            this.originalUser = tmpOriginalUserJson;
-        }
-        catch (err) {
-            console.log(this.tag + "getOriginalUser :: error :: failed to parse JSON.");
-        }
-
-        return this.originalUser;
+        return this.family;
     }
 
-    setOriginalUser(user) {
-        console.log(this.tag + "setOriginalUser :: Called with user = " + JSON.stringify(user, null, 2));
+    setFamily(family) {
+        console.log(this.tag + "setFamily :: Called with family = " + family);
 
-        localStorage.setItem("originalUser", JSON.stringify(user));
-        this.originalUser = user;
-    }
-
-    getSelectedUser() {
-        console.log(this.tag + "getSelectedUser :: Called");
-
-        let tmpSelectedUser = localStorage.getItem("selectedUser");
-        try {
-
-            let tmpSelectedUserJson = JSON.parse(tmpSelectedUser);
-            this.selectedUser = tmpSelectedUserJson;
-        }
-        catch (err) {
-            console.log(this.tag + "getSelectedUser :: error :: failed to parse JSON.");
-        }
-
-        return this.selectedUser;
-    }
-
-    setSelectedUser(user) {
-        console.log(this.tag + "setSelectedUser :: Called with user = " + JSON.stringify(user, null, 2));
-
-        localStorage.setItem("selectedUser", JSON.stringify(user));
-        this.selectedUser = user;
+        this.family = family;
+        localStorage.setItem("family", this.family);
     }
 
     getShops() {
         console.log(this.tag + "getShops :: Called");
 
-        let retVal = [];
+        let retVal = null;
 
-        let tmpShops = localStorage.getItem("shops");
-        console.log(this.tag + "getShops :: tmpShops = " + tmpShops);
+        this.loadData();
 
-        try {
+        let foundShops = this.data.filter(item => { return !item.deleted; });
 
-            let tmpShopsJson = JSON.parse(tmpShops);
-            let tmpUser = this.getSelectedUser();
-
-            this.shops = tmpShopsJson;
-
-            let resShopsJson = tmpShopsJson.filter(function (item) { return item.user == tmpUser.email; });
-
-            console.log(this.tag + "getShops :: resShopsJson = " + JSON.stringify(resShopsJson, null, 2));
-
-            if (resShopsJson.length > 0) {
-                retVal = resShopsJson;
-            }
-
-            console.log(this.tag + "getShops :: this.shops = " + JSON.stringify(this.shops, null, 2));
-
+        if (foundShops.length > 0) {
+            retVal = foundShops;
         }
-        catch (err) {
-            console.log(this.tag + "getShops :: error :: failed to parse JSON.");
-            this.shops = [];
+
+        return retVal;
+    }
+
+    getShop(shopId) {
+        console.log(this.tag + "getShop :: Called with shopId = " + shopId);
+
+        let retVal = null;
+
+        let foundShops = this.data.find(item => item.id === shopId);
+
+        if (foundShops) {
+            retVal = foundShops;
         }
 
         return retVal;
@@ -99,19 +99,20 @@ export class DataService {
     addShop(shop) {
         console.log(this.tag + "addShop :: Called with shop = " + JSON.stringify(shop, null, 2));
 
-        shop.user = this.selectedUser.email;
+        shop.family = this.family;
         shop.date = "" + Date.now();
-        this.shops.push(shop);
+        shop.deleted = false;
+        shop.products = [];
 
-        localStorage.setItem("shops", JSON.stringify(this.shops));
+        this.data.push(shop);
 
-        console.log(this.tag + "addShop :: this.shops = " + JSON.stringify(this.shops, null, 2));
+        this.saveData();
     }
 
     editShop(shop) {
         console.log(this.tag + "editShop :: Called with shop = " + JSON.stringify(shop, null, 2));
 
-        let foundShop = this.shops.find(element => element.id === shop.id);
+        let foundShop = this.getShop(shop.id);
         console.log(this.tag + "editShop :: foundShop = " + JSON.stringify(foundShop, null, 2));
 
         if (foundShop) {
@@ -119,133 +120,131 @@ export class DataService {
             foundShop.date = "" + Date.now();
         }
 
-        localStorage.setItem("shops", JSON.stringify(this.shops));
-
-        console.log(this.tag + "editShop :: this.shops = " + JSON.stringify(this.shops, null, 2));
+        this.saveData();
     }
 
-    deleteShop(shop) {
-        console.log(this.tag + "deleteShop :: Called with shop = " + JSON.stringify(shop, null, 2));
+    deleteShop(shopId) {
+        console.log(this.tag + "deleteShop :: Called with shop = " + JSON.stringify(shopId, null, 2));
 
-        this.clearProducts(shop);
+        let foundShop = this.getShop(shopId);
 
-        let foundShopIndex = this.shops.indexOf(shop);
-        console.log(this.tag + "deleteShop :: foundShopIndex = " + foundShopIndex);
-        this.shops.splice(foundShopIndex, 1);
+        if (foundShop) {
 
-        localStorage.setItem("shops", JSON.stringify(this.shops));
-
-        console.log(this.tag + "deleteShop :: this.shops = " + JSON.stringify(this.shops, null, 2));
-    }
-
-    clearShops() {
-        console.log(this.tag + "clearShops :: Called");
-
-        this.shops = [];
-        localStorage.setItem("shops", JSON.stringify(this.shops));
+            foundShop.deleted = true;
+            foundShop.date = "" + Date.now();
+            this.saveData();
+        }
+        else {
+            console.log(this.tag + "deleteShop :: shop not found");
+        }
     }
 
     // Products
 
-    getProducts(shop) {
-        console.log(this.tag + "getProducts :: Called");
+    getProducts(shopId) {
+        console.log(this.tag + "getProducts :: Called with shopId = " + shopId);
 
         let retVal = [];
 
-        let tmpProducts = localStorage.getItem("products");
+        let foundShop = this.getShop(shopId);
 
-        try {
+        if (foundShop) {
 
-            let tmpProductsJson = JSON.parse(tmpProducts);
-            let tmpUser = this.getSelectedUser();
-            this.products = tmpProductsJson;
+            let foundProducts = foundShop.products.filter(item => {
+                return (!item.deleted);
+            });
+            console.log(this.tag + "getProducts :: foundProducts = " + JSON.stringify(foundProducts, null, 2));
 
-            let resProductsJson = tmpProductsJson.filter(function (item) { return item.user == tmpUser.email; });
-
-            console.log(this.tag + "getProducts :: resProductsJson = " + JSON.stringify(resProductsJson, null, 2));
-
-            if (resProductsJson.length > 0) {
-
-                let foundProducts = resProductsJson.filter(element => element.shopId === shop.id);
-                console.log(this.tag + "getProducts :: foundProducts = " + JSON.stringify(foundProducts, null, 2));
-
-                if (foundProducts.length > 0) {
-                    retVal = foundProducts;
-                }
+            if (foundProducts.length > 0) {
+                retVal = foundProducts;
             }
-            console.log(this.tag + "getProducts :: this.products = " + JSON.stringify(this.products, null, 2));
-
         }
-        catch (err) {
-            console.log(this.tag + "getProducts :: error :: failed to parse JSON.");
-            this.products = [];
+        else {
+            console.log(this.tag + "getProducts :: products not found for shop");
         }
 
         return retVal;
     }
 
-    addProduct(product) {
+    addProduct(shopId, product) {
         console.log(this.tag + "addProduct :: Called with product = " + JSON.stringify(product, null, 2));
 
-        product.user = this.selectedUser.email;
+        product.family = this.getFamily();
         product.date = "" + Date.now();
-        this.products.push(product);
-        localStorage.setItem("products", JSON.stringify(this.products));
+        product.deleted = false;
 
-        console.log(this.tag + "addProduct :: this.products = " + JSON.stringify(this.products, null, 2));
+        let foundShop = this.getShop(shopId);
+        if (foundShop) {
+            foundShop.products.push(product);
+            this.saveData();
+        }
+        else {
+            console.log(this.tag + "addProduct :: products not found for shop");
+        }
     }
 
-    editProduct(product) {
+    editProduct(shopId, product) {
         console.log(this.tag + "editProduct :: Called with product = " + JSON.stringify(product, null, 2));
 
-        let foundProduct = this.products.find(element => element.id === product.id);
-        console.log(this.tag + "editProduct :: foundProduct = " + JSON.stringify(foundProduct, null, 2));
+        let foundShop = this.getShop(shopId);
+        if (foundShop) {
 
-        if (foundProduct) {
-            foundProduct.name = product.name;
-            foundProduct.amount = product.amount;
-            foundProduct.bought = product.bought;
-            foundProduct.date = "" + Date.now();
+            let foundProduct = foundShop.products.find(item => item.id === product.id);
+
+            if (foundProduct) {
+                foundProduct.name = product.name;
+                foundProduct.amount = product.amount;
+                foundProduct.bought = product.bought;
+                foundProduct.date = "" + Date.now();
+
+                this.saveData();
+            }
         }
-
-        localStorage.setItem("products", JSON.stringify(this.products));
-
-        console.log(this.tag + "editProduct :: this.products = " + JSON.stringify(this.products, null, 2));
+        else {
+            console.log(this.tag + "editProduct :: products not found for shop");
+        }
     }
 
-    deleteProduct(product) {
+    deleteProduct(shopId, product) {
         console.log(this.tag + "deleteProduct :: Called with product = " + JSON.stringify(product, null, 2));
-        console.log(this.tag + "deleteProduct :: Called with this.products = " + JSON.stringify(this.products, null, 2));
 
-        let foundProductIndex = this.products.indexOf(product);
-        console.log(this.tag + "deleteProduct :: foundProductIndex = " + foundProductIndex);
-        if (foundProductIndex !== -1) {
-            this.products.splice(foundProductIndex, 1);
-            localStorage.setItem("products", JSON.stringify(this.products));
+        let foundShop = this.getShop(shopId);
+        if (foundShop) {
 
-            console.log(this.tag + "deleteProduct :: this.products = " + JSON.stringify(this.products, null, 2));
+            let foundProduct = foundShop.products.find(item => item.id === product.id);
+
+            if (foundProduct) {
+                foundProduct.deleted = true;
+                foundProduct.date = "" + Date.now();
+                this.saveData();
+            }
+            else {
+                console.log(this.tag + "deleteProduct :: product not found");
+            }
         }
         else {
-            console.log(this.tag + "deleteProduct :: Error :: Product not found");
+            console.log(this.tag + "deleteProduct :: products not found for shop");
         }
     }
 
-    clearProducts(shop) {
-        console.log(this.tag + "clearProducts :: Called with shop = " + JSON.stringify(shop, null, 2));
+    clearProducts(shopId) {
+        console.log(this.tag + "clearProducts :: Called with shopId = " + JSON.stringify(shopId, null, 2));
 
-        //this.products = [];
-        //localStorage.setItem("products", JSON.stringify(this.products));
+        let foundShop = this.getShop(shopId);
+        if (foundShop) {
 
-        let foundProducts = this.products.filter(element => element.shopId !== shop.id);
-        console.log(this.tag + "getProducts :: foundProducts = " + JSON.stringify(foundProducts, null, 2));
+            let foundProducts = foundShop.products.filter(element => element.shopId === shopId);
 
-        if (foundProducts.length > 0) {
-            this.products = foundProducts;
+            if (foundProducts.length > 0) {
+                foundProducts.forEach(item => {
+                    item.deleted = true;
+                    item.date = "" + Date.now();
+                });
+            }
+            this.saveData();
         }
         else {
-            this.products = [];
+            console.log(this.tag + "deleteProduct :: products not found for shop");
         }
-
-        localStorage.setItem("products", JSON.stringify(this.products));
     }
 }

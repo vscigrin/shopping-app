@@ -31,9 +31,11 @@ export class AddProductComponent implements OnInit {
             this.title = "Add Product";
             this.isEdit = false;
 
-            let parsedShop = JSON.parse(params.shop);
-            this.shop = parsedShop;
-            console.log(this.tag + "ngOnInit :: parsedShop = ", parsedShop);
+            let parsedShopId = JSON.parse(params.shopId);
+            console.log(this.tag + "ngOnInit :: parsedShopId = ", parsedShopId);
+
+            this.shop = this.dataService.getShop(parsedShopId);
+            console.log(this.tag + "ngOnInit :: this.shop = " + JSON.stringify(this.shop, null, 2));
 
             let parsedProduct = JSON.parse(params.product);
             console.log(this.tag + "ngOnInit :: parsedProduct = ", parsedProduct);
@@ -44,7 +46,7 @@ export class AddProductComponent implements OnInit {
             this.product.bought = false;
 
 
-            this.product.shopId = parsedShop.id;
+            this.product.shopId = parsedShopId;
 
             if (parsedProduct) {
 
@@ -64,7 +66,7 @@ export class AddProductComponent implements OnInit {
     goBack() {
         console.log(this.tag + "goBack :: Called");
 
-        this.router.navigate(['product-list'], { queryParams: { shop: JSON.stringify(this.shop) } });
+        this.router.navigate(['product-list'], { queryParams: { shopId: JSON.stringify(this.shop.id) } });
     }
 
     saveProduct() {
@@ -75,10 +77,10 @@ export class AddProductComponent implements OnInit {
         if (this.product.name !== "") {
 
             if (this.isEdit) {
-                this.dataService.editProduct(this.product);
+                this.dataService.editProduct(this.shop.id, this.product);
             }
             else {
-                this.dataService.addProduct(this.product);
+                this.dataService.addProduct(this.shop.id, this.product);
             }
 
             this.goBack();

@@ -8,6 +8,7 @@
     <button style="background: url('assets/images/back.png') no-repeat; background-position: 50% 50%;" (click)="goBack()"></button>
   </div>
   <div>
+    <button *ngIf="isEdit" style="background: url('assets/images/delete.png') no-repeat; background-position: 50% 50%;" (click)="deleteShop()"></button>
     <button style="background: url('assets/images/save.png') no-repeat; background-position: 50% 50%;" (click)="saveShop()"></button>
   </div>
 </div>

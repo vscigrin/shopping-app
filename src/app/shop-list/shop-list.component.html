@@ -1,13 +1,13 @@
 <div class="top-menu">
   <div></div>
   <div>Shop List</div>
-  <div>
+  <div style="padding-left: 10px; padding-right: 10px;">
     <button (click)="showSettings()" style="background: url('assets/images/settings.png') no-repeat; background-position: 50% 50%;"></button>
   </div>
 </div>
 <div class="top-submenu">
   <div></div>
-  <div>
+  <div style="padding-left: 10px; padding-right: 10px;">
     <button (click)="addShop()" style="background: url('assets/images/add.png') no-repeat; background-position: 50% 50%;"></button>
   </div>
 </div>
@@ -15,7 +15,7 @@
   <div class="list" *ngFor="let item of shopList;">
     <div class="row" style="border-bottom: 1px solid lightgray;">
       <p (click)="viewShop(item)">{{ item.name }}</p>
-      <button style="background: url('assets/images/edit.png') no-repeat; background-position: 50% 50%;" (click)="editShop(item)"></button><button style="background: url('assets/images/delete.png') no-repeat; background-position: 50% 50%;" (click)="deleteShop(item)"></button>
+      <button style="background: url('assets/images/edit.png') no-repeat; background-position: 50% 50%;" (click)="editShop(item)"></button>
     </div>
   </div>
 </div>

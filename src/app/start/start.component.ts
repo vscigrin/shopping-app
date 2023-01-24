@@ -13,7 +13,7 @@ export class StartComponent implements OnInit {
     tag: string = "[StartComponent] ";
 
     title: string = "Register";
-    user: any = {};
+    family: string = "";
 
     constructor(
         private route: ActivatedRoute,
@@ -24,10 +24,10 @@ export class StartComponent implements OnInit {
     ngOnInit() {
         console.log(this.tag + "ngOnInit :: Called");
 
-        let originalUser = this.dataService.getOriginalUser();
+        let family = this.dataService.getFamily();
 
-        if (originalUser) {
-            console.log(this.tag + "ngOnInit :: User already registered");
+        if (family) {
+            console.log(this.tag + "ngOnInit :: family already registered");
             this.router.navigate(['shop-list'], {});
         }
     }
@@ -35,11 +35,10 @@ export class StartComponent implements OnInit {
     register() {
         console.log(this.tag + "register :: Called");
 
-        if (this.user.name.length > 0 && this.user.email.length > 0) {
-            console.log(this.tag + "register :: Successfully registered with user: " + JSON.stringify(this.user, null, 2));
+        if (this.family.length > 0) {
+            console.log(this.tag + "register :: Successfully registered with family: " + JSON.stringify(this.family, null, 2));
 
-            this.dataService.setOriginalUser(this.user);
-            this.dataService.setSelectedUser(this.user);
+            this.dataService.setFamily(this.family);
             this.router.navigate(['shop-list'], {});
         }
         else {
