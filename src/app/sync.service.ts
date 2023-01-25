@@ -24,7 +24,7 @@ export class SyncService {
     }
 
     syncData() {
-        console.log(this.tag + "syncData :: called");
+        console.log(this.tag + "syncData :: called with BACKEND_URL = " + this.BACKEND_URL);
 
         //const headers = { 'Authorization': 'Bearer my-token', 'My-Custom-Header': 'foobar' };
         let family = this.dataService.getFamily();
@@ -45,9 +45,11 @@ export class SyncService {
                         console.log(this.tag + "syncData :: post success :: response = " + JSON.stringify(response, null, 2));
 
                         this.dataService.saveAllData(response.response);
+                        alert("Data synced successfully.");
                     },
                     error: error => {
                         console.error(this.tag + "syncData :: post error :: error = " + JSON.stringify(error, null, 2));
+                        alert("Data sync failed.");
                     }
                 });
             }
@@ -58,6 +60,7 @@ export class SyncService {
         }
         catch (err) {
             console.error(this.tag + "syncData :: catch error :: err = " + JSON.stringify(err, null, 2));
+            alert("Data sync failed.");
         }
 
 
