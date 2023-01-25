@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.gevestus.familyshare" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>FamilyShare</name>
+    <description>An application to help families to share their data, such as: Events, Shopping lists, etc...</description>
+    <author email="vitali.scigrin@gmail.com" href="">
+        Gevestus Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <hook src="scripts/prepareAngular2App.js" type="before_prepare" />
+</widget>

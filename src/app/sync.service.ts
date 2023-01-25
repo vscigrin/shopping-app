@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 //import { Observable } from 'rxjs';
 import { DataService } from './data.service';
+import { AppConstants } from './app-constants';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,17 @@ export class SyncService {
 
     tag: string = "[SyncService] ";
 
-    constructor(private httpClient: HttpClient, private dataService: DataService) { }
+    BACKEND_URL: string = "";
+
+    constructor(private httpClient: HttpClient, private dataService: DataService) {
+
+        if (AppConstants.BUILD_FOR_RELEASE === true) {
+            this.BACKEND_URL = AppConstants.PROD_BACKEND_URL;
+        }
+        else {
+            this.BACKEND_URL = AppConstants.DEV_BACKEND_URL;
+        }
+    }
 
     syncData() {
         console.log(this.tag + "syncData :: called");
@@ -29,9 +40,7 @@ export class SyncService {
                 const body = localDataObj;
                 console.log(this.tag + "syncData :: body = " + JSON.stringify(body, null, 2));
 
-                //this.httpClient.post<any>('http://localhost:9000/.netlify/functions/api/sendData', body, { headers }).subscribe({
-
-                this.httpClient.post<any>('http://localhost:9000/.netlify/functions/api/syncData', body).subscribe({
+                this.httpClient.post<any>(this.BACKEND_URL + 'syncData', body).subscribe({
                     next: response => {
                         console.log(this.tag + "syncData :: post success :: response = " + JSON.stringify(response, null, 2));
 
